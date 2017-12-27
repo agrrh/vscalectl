@@ -1,7 +1,168 @@
+import netaddr
+from lib.templates import Templates
+
+
 class Client(object):
     def __init__(self, api):
         self.api = api
+        self.templates = Templates()
+
+    def account(self, identifier, action):
+        data = self.api.call('account')
+
+        status = 'OK' if data['status'] == 'ok' and not data['info']['is_blocked'] else 'Inactive or blocked!'
+        name = ' '.join(filter(None, (
+            data['info']['name'], data['info']['middlename'], data['info']['surname'])
+        ))
+
+        print(self.templates.ACCOUNT.format(
+            id=data['info']['id'],
+            status=status,
+            name=name,
+            email=data['info']['email'],
+            phone=data['info']['mobile']
+        ))
+
+    def servers(self, identifier, action):
+        if identifier:
+            data = self.api.call('scalets/{}'.format(identifier))
+            if action == 'get':
+                pass
+            else:
+                pass
+            res = self.templates.SERVERS_ONE.format(
+                ctid=data['ctid'],
+                name=data['name'],
+                hostname=data['hostname'],
+                status=data['status'],
+                image=data['made_from'],
+                plan=data['rplan'],
+                locked='YES' if data['locked'] else 'no',
+                keys=', '.join(['{id}:{key}'.format(*key) for key in data['keys']]),
+                location=data['location'],
+                address='{ip} @ {gateway}/{mask}'.format(
+                    ip=data['public_address']['address'],
+                    gateway=data['public_address']['gateway'],
+                    mask=netaddr.IPAddress(data['public_address']['netmask']).netmask_bits(),
+                ) if data['public_address'] else '0.0.0.0 @ 0.0.0.0/0',
+                address_private=' {ip} @ {gateway}/{mask}'.format(
+                    ip=data['private_address']['address'],
+                    gateway=data['private_address']['gateway'],
+                    mask=netaddr.IPAddress(data['private_address']['netmask']).netmask_bits()
+                ) if data['private_address'] else ''
+            )
+        else:
+            data = self.api.call('scalets')
+            res = []
+            res.append(self.templates.SERVERS_ROW.format(
+                ctid='CTID',
+                name='Name',
+                status='Status',
+                image='Image',
+                plan='Plan',
+                location='Loc',
+                locked='',
+                address='Address'
+            ))
+            for server in data:
+                res.append(self.templates.SERVERS_ROW.format(
+                    ctid=server['ctid'],
+                    name=server['name'] if len(server['name']) < 24 else server['name'][:22] + "…",
+                    status=server['status'],
+                    image=server['made_from'],
+                    plan=server['rplan'],
+                    locked='L ' if server['locked'] else '',
+                    location=server['location'],
+                    address=server['public_address']['address']
+                ))
+
+        print("\n".join(res))
+
+    def images(self, identifier, action):
+        data = self.api.call('images')
+
+        # Optimize locations field
+        data_optimized = {}
+        for image in data:
+            if image['id'] not in data_optimized and image['active']:
+                data_optimized[image['id']] = image
+            else:
+                if image['description'] == data_optimized[image['id']]['description'] \
+                    and image['rplans'] == data_optimized[image['id']]['rplans']:
+                    data_optimized[image['id']]['locations'] += image['locations']
+        data = [data_optimized[i] for i in data_optimized]
+
+        res = []
+        for image in data:
+            res.append(self.templates.IMAGES_ROW.format(
+                id=image['id'],
+                description=image['description'],
+                plans=','.join(sorted(image['rplans'])),
+                locations=','.join(sorted(image['locations']))
+            ))
+        res.sort(key=lambda x: x[0])  # Sort list of images by ID
+        res.insert(0, self.templates.IMAGES_ROW.format(
+            id='ID',
+            description='Description',
+            size='Size',
+            active='Active',
+            plans='Plans',
+            locations='Locations'
+        ))
+        print("\n".join(res))
+
+    def locations(self, identifier, action):
+        data = self.api.call('locations')
+
+        res = []
+        res.append(self.templates.LOCATIONS_ROW.format(
+            id='ID',
+            description='Description',
+            plans='Plans'
+        ))
+        for loc in data:
+            res.append(self.templates.LOCATIONS_ROW.format(
+                id=loc['id'],
+                description=loc['description'],
+                plans=','.join(sorted(loc['rplans']))
+            ))
+        print("\n".join(res))
+
+    def plans(self, identifier, action):
+        data = self.api.call('rplans')
+        data_prices = self.api.call('billing/prices')['default']
+
+        res = []
+        res.append(self.templates.PLANS_ROW.format(
+            id='ID',
+            price='Price',
+            cpus='CPU',
+            ram='RAM',
+            disk='Disk',
+            ips='IPs',
+            locations='Locations'
+        ))
+        for plan in data:
+            res.append(self.templates.PLANS_ROW.format(
+                id=plan['id'],
+                price=[int(data_prices[p]['month']/100) for p in data_prices if p == plan['id']][0],
+                cpus=plan['cpus'],
+                ram=str(round(plan['memory'] / 1024, 1)) + 'G',
+                disk=str(int(plan['disk'] / 1024)) + 'G',
+                ips=plan['addresses'],
+                locations=','.join(sorted(plan['locations']))
+            ))
+        print("\n".join(res))
 
     def do(self, args):
-        print(args)
-        print(self.api.cache.__dict__)
+        objects_map = {
+            'account': self.account,
+
+            'servers': self.servers,
+
+            'images': self.images,
+            'locations': self.locations,
+            'plans': self.plans
+        }
+
+        objects_map[args.object](args.identifier, args.action)

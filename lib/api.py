@@ -64,7 +64,7 @@ class API(object):
             from haversine import haversine
             user_geo = requests.get('http://freegeoip.net/json/').json()
         except:
-            print("Warning, could not detect geo info: {}".format(sys.exc_info()[0]))
+            print("Warning, haversine could not detect geo info: {}".format(sys.exc_info()[0]))
             user_geo = False
 
         if user_geo \
