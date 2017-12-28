@@ -10,7 +10,7 @@ from lib.client import Client
 
 
 def args_parse():
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='CLI tool to operate vscale.io API')
 
     parser.add_argument(
         'object', metavar='OBJECT', type=str,
