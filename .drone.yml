@@ -25,6 +25,4 @@ pipeline:
       - telegram_personal_bot_token
       - telegram_chatid_me
     token: "$${TELEGRAM_PERSONAL_BOT_TOKEN}"
-    to: $${TELEGRAM_CHATID_ME}
-    document:
-      - dist/vscalectl
+    to: "$${TELEGRAM_CHATID_ME}"
