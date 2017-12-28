@@ -1,4 +1,5 @@
 pipeline:
+
   test_smoke:
     image: python:3-slim
     environment:
@@ -6,3 +7,23 @@ pipeline:
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
+
+  build:
+    image: python:3-slim
+    commands:
+      - pip3 install -r requirements.txt
+      - pip3 install pyinstaller
+      - pyinstaller --onefile vscalectl.py
+    when:
+      branch: master
+
+  notify_telegram:
+    image: appleboy/drone-telegram
+    environment:
+      DRONE_GLOBAL_SECRETS=/etc/drone-secrets.yml
+    token: <telegram_personal_bot_token>
+    to: <telegram_chatid_me>
+    document:
+      - dist/vscalectl
+    volumes:
+      - /etc/drone-secrets.yml:/etc/drone-secrets.yml
