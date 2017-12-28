@@ -11,6 +11,8 @@ Currently lacks some "complex" methods like upgrading, making backups and managi
 ```
 # git clone ... && cd vscalectl
 
+export VSCALE_API_TOKEN="my-secret-token"
+
 pip3 install -r requirements.txt
 ./vscalectl.py --help
 ```
