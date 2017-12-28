@@ -1,5 +1,4 @@
 pipeline:
-
   test_smoke:
     image: python:3-slim
     environment:
@@ -7,6 +6,8 @@ pipeline:
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
+    when:
+      branch: master
 
   build:
     image: python:3-slim
