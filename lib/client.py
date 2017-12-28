@@ -3,9 +3,11 @@ from lib.templates import Templates
 
 
 class Client(object):
-    def __init__(self, api):
+    def __init__(self, api, no_header=False):
         self.api = api
         self.templates = Templates()
+
+        self.no_header = no_header
 
     def account(self, identifier, action):
         data = self.api.call('account')
@@ -74,16 +76,17 @@ class Client(object):
         else:
             data = self.api.call('scalets')
             res = []
-            res.append(self.templates.SERVERS_ROW.format(
-                ctid='CTID',
-                name='Name',
-                status='Status',
-                image='Image',
-                plan='Plan',
-                location='Loc',
-                locked='',
-                address='Address'
-            ))
+            if not self.no_header:
+                res.append(self.templates.SERVERS_ROW.format(
+                    ctid='CTID',
+                    name='Name',
+                    status='Status',
+                    image='Image',
+                    plan='Plan',
+                    location='Loc',
+                    locked='',
+                    address='Address'
+                ))
             for server in data:
                 res.append(self.templates.SERVERS_ROW.format(
                     ctid=server['ctid'],
@@ -124,25 +127,27 @@ class Client(object):
                 locations=','.join(sorted(image['locations']))
             ))
         res.sort(key=lambda x: x[0])  # Sort list of images by ID
-        res.insert(0, self.templates.IMAGES_ROW.format(
-            id='ID',
-            description='Description',
-            size='Size',
-            active='Active',
-            plans='Plans',
-            locations='Locations'
-        ))
+        if not self.no_header:
+            res.insert(0, self.templates.IMAGES_ROW.format(
+                id='ID',
+                description='Description',
+                size='Size',
+                active='Active',
+                plans='Plans',
+                locations='Locations'
+            ))
         print("\n".join(res))
 
     def locations(self, identifier, action):
         data = self.api.call('locations')
 
         res = []
-        res.append(self.templates.LOCATIONS_ROW.format(
-            id='ID',
-            description='Description',
-            plans='Plans'
-        ))
+        if not self.no_header:
+            res.append(self.templates.LOCATIONS_ROW.format(
+                id='ID',
+                description='Description',
+                plans='Plans'
+            ))
         for loc in data:
             res.append(self.templates.LOCATIONS_ROW.format(
                 id=loc['id'],
@@ -156,15 +161,16 @@ class Client(object):
         data_prices = self.api.call('billing/prices')['default']
 
         res = []
-        res.append(self.templates.PLANS_ROW.format(
-            id='ID',
-            price='Price',
-            cpus='CPU',
-            ram='RAM',
-            disk='Disk',
-            ips='IPs',
-            locations='Locations'
-        ))
+        if not self.no_header:
+            res.append(self.templates.PLANS_ROW.format(
+                id='ID',
+                price='Price',
+                cpus='CPU',
+                ram='RAM',
+                disk='Disk',
+                ips='IPs',
+                locations='Locations'
+            ))
         for plan in data:
             res.append(self.templates.PLANS_ROW.format(
                 id=plan['id'],

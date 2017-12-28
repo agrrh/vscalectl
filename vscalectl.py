@@ -25,6 +25,9 @@ def args_parse():
         help='Action to perform, e.g. start/stop.'
     )
 
+    parser.add_argument('--no-header', action='store_true', help='Do not print header in lists.')
+
+    parser.add_argument('--cache-file', type=str, default='~/.vscalectl.yml', help='Path of file to store cached default parameters.')
     parser.add_argument('--no-cache', action='store_true', help='Remove cache file before running script')
 
     return parser, parser.parse_args()
@@ -38,12 +41,12 @@ if __name__ == '__main__':
 
     parser, args = args_parse()
 
-    cache = Cache("~/.vscalectl.yml", args.no_cache)
+    cache = Cache(args.cache_file, dont_use_cache=args.no_cache)
     cache.load()
 
     api = API(token, cache)
 
-    cli = Client(api)
+    cli = Client(api, no_header=args.no_header)
     if not cli.do(args):
         parser.print_help()
         sys.exit(0)
