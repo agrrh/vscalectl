@@ -1,3 +1,4 @@
-haversine>=0.4.5
-netaddr>=0.7.19
 requests>=2.9.1
+PyYAML>=3.12
+netaddr>=0.7.19
+haversine>=0.4.5
