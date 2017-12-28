@@ -20,6 +20,9 @@ pipeline:
 
   telegram:
     image: appleboy/drone-telegram
+    secrets:
+      - telegram_personal_bot_token
+      - telegram_chatid_me
     token: <telegram_personal_bot_token>
     to: <telegram_chatid_me>
     document:
