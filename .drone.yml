@@ -7,7 +7,7 @@ pipeline:
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
-      - echo <telegram_personal_bot_token>
+      - echo ${telegram_personal_bot_token}
 
   build:
     image: python:3-slim
