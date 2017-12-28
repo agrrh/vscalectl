@@ -6,8 +6,6 @@ pipeline:
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
-    when:
-      branch: master
 
   build:
     image: python:3-slim
@@ -19,8 +17,20 @@ pipeline:
     when:
       branch: master
 
-  telegram:
+  telegram_master:
     image: appleboy/drone-telegram
     secrets:
       - telegram_token
       - telegram_to
+    document: dist/vscalectl
+    when:
+      branch: master
+
+  telegram_dev:
+    image: appleboy/drone-telegram
+    secrets:
+      - telegram_token
+      - telegram_to
+    when:
+      branch:
+        exclude: master
