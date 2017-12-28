@@ -7,6 +7,7 @@ pipeline:
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
+      - echo <telegram_personal_bot_token>
 
   build:
     image: python:3-slim
@@ -20,6 +21,9 @@ pipeline:
 
   telegram:
     image: appleboy/drone-telegram
+    secrets:
+      - telegram_personal_bot_token
+      - telegram_chatid_me
     token: <telegram_personal_bot_token>
     to: <telegram_chatid_me>
     document:
