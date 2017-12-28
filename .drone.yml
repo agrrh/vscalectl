@@ -18,13 +18,10 @@ pipeline:
     when:
       branch: master
 
-  notify_telegram:
+  telegram:
     image: appleboy/drone-telegram
-    environment:
-      - DRONE_GLOBAL_SECRETS=/etc/drone-secrets.yml
-    token: <telegram_personal_bot_token>
-    to: <telegram_chatid_me>
+    secrets:
+      - telegram_personal_bot_token
+      - telegram_chatid_me
     document:
       - dist/vscalectl
-    volumes:
-      - /etc/drone-secrets.yml:/etc/drone-secrets.yml
