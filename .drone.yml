@@ -1,20 +1,4 @@
 pipeline:
-  test_secrets_one:
-    image: alpine
-    secrets:
-      - telegram_personal_bot_token
-      - telegram_chatid_me
-    commands:
-      - echo ${TELEGRAM_PERSONAL_BOT_TOKEN}
-      - echo ${TELEGRAM_CHATID_ME}
-      - echo "${TELEGRAM_PERSONAL_BOT_TOKEN}"
-      - echo "${TELEGRAM_CHATID_ME}"
-      - echo $${TELEGRAM_PERSONAL_BOT_TOKEN}
-      - echo $${TELEGRAM_CHATID_ME}
-      - echo "$${TELEGRAM_PERSONAL_BOT_TOKEN}"
-      - echo "$${TELEGRAM_CHATID_ME}"
-
-
   test_smoke:
     image: python:3-slim
     environment:
@@ -40,7 +24,7 @@ pipeline:
     secrets:
       - telegram_personal_bot_token
       - telegram_chatid_me
-    token: ${TELEGRAM_PERSONAL_BOT_TOKEN}
-    to: ${TELEGRAM_CHATID_ME}
+    token: $${TELEGRAM_PERSONAL_BOT_TOKEN}
+    to: $${TELEGRAM_CHATID_ME}
     document:
       - dist/vscalectl
