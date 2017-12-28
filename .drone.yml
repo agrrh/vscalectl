@@ -22,7 +22,5 @@ pipeline:
   telegram:
     image: appleboy/drone-telegram
     secrets:
-      - telegram_personal_bot_token
-      - telegram_chatid_me
-    token: "$${TELEGRAM_PERSONAL_BOT_TOKEN}"
-    to: "$${TELEGRAM_CHATID_ME}"
+      - telegram_token
+      - telegram_to
