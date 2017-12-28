@@ -34,7 +34,7 @@ class API(object):
             print("Error occured: {}".format(sys.exc_info()[0]))
             res = False
 
-        if not res:
+        if res is False:
             print('Could not call API or parse output, exiting.')
             sys.exit(0)
 
