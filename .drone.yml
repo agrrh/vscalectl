@@ -5,8 +5,6 @@ pipeline:
     environment:
       - VSCALE_API_TOKEN=invalid-buit-its-okay
     commands:
-      - echo ${TELEGRAM_PERSONAL_BOT_TOKEN}
-      - echo $${TELEGRAM_PERSONAL_BOT_TOKEN}
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
 
@@ -25,7 +23,7 @@ pipeline:
     secrets:
       - telegram_personal_bot_token
       - telegram_chatid_me
-    token: <telegram_personal_bot_token>
-    to: <telegram_chatid_me>
+    token: $${TELEGRAM_PERSONAL_BOT_TOKEN}
+    to: $${TELEGRAM_CHATID_ME}
     document:
       - dist/vscalectl
