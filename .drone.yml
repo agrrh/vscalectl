@@ -10,8 +10,8 @@ pipeline:
   build:
     image: python:3-slim
     commands:
-      - apk update
-      - apk install binutils
+      - apt update -qq
+      - apt install binutils -qqy
       - pip3 install -r requirements.txt
       - pip3 install pyinstaller
       - pyinstaller --onefile vscalectl.py
