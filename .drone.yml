@@ -3,5 +3,4 @@ pipeline:
     image: python:3-slim
     commands:
       - pip3 install -r requirements.txt
-      - ./vscalectl --help
-      - date
+      - ./vscalectl.py --help
