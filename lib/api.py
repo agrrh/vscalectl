@@ -34,6 +34,10 @@ class API(object):
             print("Error occured: {}".format(sys.exc_info()[0]))
             res = False
 
+        if not res:
+            print('Could not call API or parse output, exiting.')
+            sys.exit(0)
+
         return res
 
     def _best_image(self):

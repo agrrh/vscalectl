@@ -11,16 +11,16 @@ class Templates(object):
     )
 
     SERVERS_ONE = (
-        "CTID:\t{ctid}\n" +
-        "Status:\t{status}\n" +
-        "Name:\t{name}\n" +
+        "CTID:\t\t{ctid}\n" +
+        "Status:\t\t{status}\n" +
+        "Name:\t\t{name}\n" +
         "Hostname:\t{hostname}\n" +
-        "Image:\t{image}\n" +
+        "Image:\t\t{image}\n" +
         "Address:\t{address}{address_private}\n" +
-        "Keys:\t{keys}" +
+        "Keys:\t\t{keys}\n" +
         "Location:\t{location}\n" +
-        "Plan:\t{plan}\n" +
-        "Locked:\t{locked}"
+        "Plan:\t\t{plan}\n" +
+        "Locked:\t\t{locked}"
     )
 
     SERVERS_ROW = "{ctid:<10}{locked}{status:<10}{name:<24}{address:<16}{plan:<8}{location:<8}{image:<24}"

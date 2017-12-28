@@ -44,4 +44,6 @@ if __name__ == '__main__':
     api = API(token, cache)
 
     cli = Client(api)
-    cli.do(args)
+    if not cli.do(args):
+        parser.print_help()
+        sys.exit(0)

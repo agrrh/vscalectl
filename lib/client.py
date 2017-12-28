@@ -25,11 +25,31 @@ class Client(object):
 
     def servers(self, identifier, action):
         if identifier:
-            data = self.api.call('scalets/{}'.format(identifier))
             if action == 'get':
-                pass
-            else:
-                pass
+                data = self.api.call('scalets/{}'.format(identifier))
+            elif action == 'create':
+                data = self.api.call('scalets'.format(identifier), method='POST', data={
+                    'make_from': self.api.cache.image,
+                    'rplan': self.api.cache.plan,
+                    'do_start': True,
+                    'name': identifier,
+                    'hostname': identifier,
+                    'keys': self.api.cache.keys,
+                    'location': self.api.cache.location
+                })
+            elif action == 'stop':
+                data = self.api.call('scalets/{}/stop'.format(identifier), method='PATCH')
+            elif action == 'start':
+                data = self.api.call('scalets/{}/start'.format(identifier), method='PATCH')
+            elif action == 'restart':
+                data = self.api.call('scalets/{}/restart'.format(identifier), method='PATCH')
+            elif action == 'rebuild':
+                data = self.api.call('scalets/{}/rebuild'.format(identifier), method='PATCH')
+            elif action == 'delete':
+                data = self.api.call('scalets/{}'.format(identifier), method='DELETE')
+            else:  # Fallback to get
+                data = self.api.call('scalets/{}'.format(identifier))
+
             res = self.templates.SERVERS_ONE.format(
                 ctid=data['ctid'],
                 name=data['name'],
@@ -37,8 +57,8 @@ class Client(object):
                 status=data['status'],
                 image=data['made_from'],
                 plan=data['rplan'],
-                locked='YES' if data['locked'] else 'no',
-                keys=', '.join(['{id}:{key}'.format(*key) for key in data['keys']]),
+                locked='yes' if data['locked'] else 'no',
+                keys=', '.join(['{id}:{name}'.format(**key) for key in data['keys']]),
                 location=data['location'],
                 address='{ip} @ {gateway}/{mask}'.format(
                     ip=data['public_address']['address'],
@@ -76,7 +96,10 @@ class Client(object):
                     address=server['public_address']['address']
                 ))
 
-        print("\n".join(res))
+        if isinstance(res, (list)):
+            print("\n".join(res))
+        else:
+            print(res)
 
     def images(self, identifier, action):
         data = self.api.call('images')
@@ -165,4 +188,8 @@ class Client(object):
             'plans': self.plans
         }
 
-        objects_map[args.object](args.identifier, args.action)
+        if args.object in objects_map:
+            objects_map[args.object](args.identifier, args.action)
+            return True
+
+        return False
