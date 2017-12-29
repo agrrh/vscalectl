@@ -11,6 +11,9 @@ pipeline:
     image: python:3-slim
     commands:
       - export VSCALE_API_TOKEN=$${VSCALE_API_TOKEN}
+      - echo ${VSCALE_API_TOKEN}
+      - export VSCALE_API_TOKEN=${vscale_api_token}
+      - echo ${VSCALE_API_TOKEN}
       - pip3 install -r requirements.txt
       - python3 tests_vscalectl.py
 
@@ -25,20 +28,7 @@ pipeline:
     when:
       branch: master
 
-  telegram_master:
-    image: appleboy/drone-telegram
-    secrets:
-      - telegram_token
-      - telegram_to
-    message: >
-      build #{{build.number}} ({{build.branch}}/{{build.commit}}) @{{build.author}}
-      time: {{since build.started}}
-      link: {{build.link}}
-    document: dist/vscalectl
-    when:
-      branch: master
-
-  telegram_dev:
+  telegram:
     image: appleboy/drone-telegram
     secrets:
       - telegram_token
@@ -47,6 +37,13 @@ pipeline:
       build #{{build.number}}
       link: {{build.link}}
     when:
-      branch:
-        exclude: master
       status: changed
+
+  telegram_distribute:
+    image: appleboy/drone-telegram
+    secrets:
+      - telegram_token
+      - telegram_to
+    document: dist/vscalectl
+    when:
+      branch: master
