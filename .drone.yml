@@ -24,7 +24,7 @@ pipeline:
       - telegram_token
       - telegram_to
     message: >
-      build #{{build.number}} ({{build.commit}}) @{{build.author}}
+      build #{{build.number}} ({{build.branch}}/{{build.commit}}) @{{build.author}}
       time: {{since build.started}}
       link: {{build.link}}
     document: dist/vscalectl
@@ -37,7 +37,7 @@ pipeline:
       - telegram_token
       - telegram_to
     message: >
-      build #{{build.number}} ({{build.commit}}) @{{build.author}}
+      build #{{build.number}} ({{build.branch}}/{{build.commit}}) @{{build.author}}
       time: {{since build.started}}
       link: {{build.link}}
     when:
