@@ -11,9 +11,9 @@ pipeline:
     image: python:3-slim
     commands:
       - export VSCALE_API_TOKEN=$${VSCALE_API_TOKEN}
-      - echo ${VSCALE_API_TOKEN}
+      - echo $${VSCALE_API_TOKEN}
       - export VSCALE_API_TOKEN=${vscale_api_token}
-      - echo ${VSCALE_API_TOKEN}
+      - echo $${VSCALE_API_TOKEN}
       - pip3 install -r requirements.txt
       - python3 tests_vscalectl.py
 
