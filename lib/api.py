@@ -36,7 +36,7 @@ class API(object):
 
         if res is False:
             print('Could not call API or parse output, exiting.')
-            sys.exit(0)
+            sys.exit(1)
 
         return res
 
