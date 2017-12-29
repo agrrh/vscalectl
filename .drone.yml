@@ -2,7 +2,7 @@ pipeline:
   test_smoke:
     image: python:3-slim
     environment:
-      - VSCALE_API_TOKEN=invalid-buit-its-okay
+      - VSCALE_API_TOKEN=invalid-but-its-okay
     commands:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
