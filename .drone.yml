@@ -37,10 +37,9 @@ pipeline:
       - telegram_token
       - telegram_to
     message: >
-      build #{{build.number}} ({{build.branch}}/{{build.commit}}) @{{build.author}}
-      time: {{since build.started}}
+      build #{{build.number}}
       link: {{build.link}}
     when:
       branch:
         exclude: master
-        status: changed
+      status: changed
