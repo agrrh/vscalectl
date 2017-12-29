@@ -1,6 +1,5 @@
 Things not to forget:
 
-- Customize notify message
 - Create Telegram group/channel to be able to chat about the product
 - Implement create server with customizable parameters
 - Write tests

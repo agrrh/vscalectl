@@ -23,6 +23,10 @@ pipeline:
     secrets:
       - telegram_token
       - telegram_to
+    message: >
+      build #{{build.number}} ({{build.commit}}) @{{build.author}}
+      time: {{since build.started}}
+      link: {{build.link}}
     document: dist/vscalectl
     when:
       branch: master
@@ -32,6 +36,10 @@ pipeline:
     secrets:
       - telegram_token
       - telegram_to
+    message: >
+      build #{{build.number}} ({{build.commit}}) @{{build.author}}
+      time: {{since build.started}}
+      link: {{build.link}}
     when:
       branch:
         exclude: master
