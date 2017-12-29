@@ -1,6 +1,5 @@
 Things not to forget:
 
-- Replace `apt` with `apt-cache/apt-get` in `drone.yml`
 - Fix fake token value in `drone.yml`
 - Notify only when status has changes or push to master occured
 - Customize notify message
