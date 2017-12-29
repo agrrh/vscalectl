@@ -10,7 +10,7 @@ pipeline:
   test_functional:
     image: python:3-slim
     environment:
-      - VSCALE_API_TOKEN=$${VSCALE_API_TOKEN}
+      - VSCALE_API_TOKEN=${VSCALE_API_TOKEN}
     commands:
       - pip3 install -r requirements.txt
       - python3 tests_vscalectl.py
