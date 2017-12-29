@@ -16,6 +16,8 @@ if __name__ == '__main__':
     cache = Cache('~/.vscalectl.yml', remove_cache=True)
     cache.load()
 
+    print(token)
+
     api = API(token, cache)
 
     cli = Client(api, no_header=True)
