@@ -1,20 +1,15 @@
 pipeline:
   test_smoke:
     image: python:3-slim
-    environment:
-      - VSCALE_API_TOKEN=invalid-but-its-okay
     commands:
-      - pip3 install -r requirements.txt
-      - ./vscalectl.py --help
-
-  test_functional:
-    image: python:3-slim
-    commands:
+      - echo ${VSCALE_API_TOKEN}
+      - echo $${VSCALE_API_TOKEN}
       - export VSCALE_API_TOKEN=$${VSCALE_API_TOKEN}
       - echo $${VSCALE_API_TOKEN}
       - export VSCALE_API_TOKEN=${vscale_api_token}
       - echo $${VSCALE_API_TOKEN}
       - pip3 install -r requirements.txt
+      - ./vscalectl.py --help
       - python3 tests_vscalectl.py
 
   build:
