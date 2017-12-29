@@ -9,7 +9,7 @@ class Client(object):
 
         self.no_header = no_header
 
-    def account(self, identifier, action):
+    def account(self, identifier, action, params):
         data = self.api.call('account')
 
         status = 'OK' if data['status'] == 'ok' and not data['info']['is_blocked'] else 'Inactive or blocked!'
@@ -25,19 +25,18 @@ class Client(object):
             phone=data['info']['mobile']
         ))
 
-    def servers(self, identifier, action):
+    def servers(self, identifier, action, params):
         if identifier:
             if action == 'get':
                 data = self.api.call('scalets/{}'.format(identifier))
             elif action == 'create':
                 data = self.api.call('scalets'.format(identifier), method='POST', data={
-                    'make_from': self.api.cache.image,
-                    'rplan': self.api.cache.plan,
+                    'make_from': params['image'] if params['image'] is not None else self.api.cache.image,
+                    'rplan': params['plan'] if params['plan'] is not None else self.api.cache.plan,
                     'do_start': True,
                     'name': identifier,
                     'hostname': identifier,
-                    'keys': self.api.cache.keys,
-                    'location': self.api.cache.location
+                    'location': params['location'] if params['location'] is not None else self.api.cache.location
                 })
             elif action == 'stop':
                 data = self.api.call('scalets/{}/stop'.format(identifier), method='PATCH')
@@ -104,7 +103,7 @@ class Client(object):
         else:
             print(res)
 
-    def images(self, identifier, action):
+    def images(self, identifier, action, params):
         data = self.api.call('images')
 
         # Optimize locations field
@@ -138,7 +137,7 @@ class Client(object):
             ))
         print("\n".join(res))
 
-    def locations(self, identifier, action):
+    def locations(self, identifier, action, params):
         data = self.api.call('locations')
 
         res = []
@@ -156,7 +155,7 @@ class Client(object):
             ))
         print("\n".join(res))
 
-    def plans(self, identifier, action):
+    def plans(self, identifier, action, params):
         data = self.api.call('rplans')
         data_prices = self.api.call('billing/prices')['default']
 
@@ -183,7 +182,7 @@ class Client(object):
             ))
         print("\n".join(res))
 
-    def do(self, args):
+    def do(self, args, params):
         objects_map = {
             'account': self.account,
 
@@ -195,7 +194,7 @@ class Client(object):
         }
 
         if args.object in objects_map:
-            objects_map[args.object](args.identifier, args.action)
+            objects_map[args.object](args.identifier, args.action, params)
             return True
 
         return False

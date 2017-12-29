@@ -11,14 +11,18 @@ from lib.client import Client
 
 epilog = """usage:
 
-  vscalectl account                  Display account info.
-            locations                Show available data-centers.
-            images                   List OS repository.
-            plans                    Inspect resources and prices.
+  vscalectl account                 Display account info.
+            locations               Show available data-centers.
+            images                  List OS repository.
+            plans                   Inspect resources and prices.
 
-            servers                  Show all servers.
-            servers <ID>             Get single server information.
-            servers <Name> create    Create new server with specific name and hostname.
+            servers                 Show all servers.
+            servers <ID>            Get single server information.
+            servers <Name> create   Create new server with specific name and hostname.
+                                    Also posible to customize some parameters:
+                                        --image <ImageID>
+                                        --plan <PlanID>
+                                        --location <LocationID>
             servers <ID> stop        Stop (shutdown) server.
             servers <ID> start       Turn server on.
             servers <ID> restart     Reboot server.
@@ -48,6 +52,10 @@ def args_parse(epilog):
         help='Action to perform, e.g. start/stop.'
     )
 
+    parser.add_argument('--image', type=str, default=None, help='Image ID to use with new server.')
+    parser.add_argument('--plan', type=str, default=None, help='Plan ID to apply for new server.')
+    parser.add_argument('--location', type=str, default=None, help='Location ID where to create server.')
+
     parser.add_argument('--no-header', action='store_true', help='Do not print header in lists.')
 
     parser.add_argument('--cache-file', type=str, default='~/.vscalectl.yml', help='Path of file to store cached default parameters.')
@@ -63,6 +71,11 @@ if __name__ == '__main__':
         sys.exit(1)
 
     parser, args = args_parse(epilog)
+    params = {
+        'image': args.image,
+        'plan': args.plan,
+        'location': args.location
+    }
 
     cache = Cache(args.cache_file, dont_use_cache=args.no_cache)
     cache.load()
@@ -70,6 +83,6 @@ if __name__ == '__main__':
     api = API(token, cache)
 
     cli = Client(api, no_header=args.no_header)
-    if not cli.do(args):
+    if not cli.do(args, params):
         parser.print_help()
         sys.exit(0)
