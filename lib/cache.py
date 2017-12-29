@@ -4,7 +4,7 @@ import time
 
 
 class Cache(object):
-    def __init__(self, path, dont_use_cache, expiration=1209600):
+    def __init__(self, path, remove_cache=False, expiration=1209600):
         self.file_path = os.path.expanduser(path)
         self.file_expiration = expiration
 
@@ -13,7 +13,7 @@ class Cache(object):
         self.location = None
         self.plan = None
 
-        if dont_use_cache:
+        if remove_cache:
             try:
                 os.remove(path)
             except FileNotFoundError:

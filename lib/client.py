@@ -17,13 +17,14 @@ class Client(object):
             data['info']['name'], data['info']['middlename'], data['info']['surname'])
         ))
 
-        print(self.templates.ACCOUNT.format(
+        res = self.templates.ACCOUNT.format(
             id=data['info']['id'],
             status=status,
             name=name,
             email=data['info']['email'],
             phone=data['info']['mobile']
-        ))
+        )
+        return res
 
     def servers(self, identifier, action, params):
         if identifier:
@@ -98,10 +99,7 @@ class Client(object):
                     address=server['public_address']['address']
                 ))
 
-        if isinstance(res, (list)):
-            print("\n".join(res))
-        else:
-            print(res)
+        return res
 
     def images(self, identifier, action, params):
         data = self.api.call('images')
@@ -135,7 +133,7 @@ class Client(object):
                 plans='Plans',
                 locations='Locations'
             ))
-        print("\n".join(res))
+        return res
 
     def locations(self, identifier, action, params):
         data = self.api.call('locations')
@@ -153,7 +151,7 @@ class Client(object):
                 description=loc['description'],
                 plans=','.join(sorted(loc['rplans']))
             ))
-        print("\n".join(res))
+        return res
 
     def plans(self, identifier, action, params):
         data = self.api.call('rplans')
@@ -180,9 +178,9 @@ class Client(object):
                 ips=plan['addresses'],
                 locations=','.join(sorted(plan['locations']))
             ))
-        print("\n".join(res))
+        return res
 
-    def do(self, args, params):
+    def do(self, object_, identifier, action, params):
         objects_map = {
             'account': self.account,
 
@@ -193,8 +191,7 @@ class Client(object):
             'plans': self.plans
         }
 
-        if args.object in objects_map:
-            objects_map[args.object](args.identifier, args.action, params)
-            return True
+        if object_ in objects_map:
+            return objects_map[object_](identifier, action, params)
 
         return False

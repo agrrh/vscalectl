@@ -77,12 +77,18 @@ if __name__ == '__main__':
         'location': args.location
     }
 
-    cache = Cache(args.cache_file, dont_use_cache=args.no_cache)
+    cache = Cache(args.cache_file, remove_cache=args.no_cache)
     cache.load()
 
     api = API(token, cache)
 
     cli = Client(api, no_header=args.no_header)
-    if not cli.do(args, params):
+    res = cli.do(args.object, args.identifier, args.action, params)
+
+    if isinstance(res, (list)):
+        print("\n".join(res))
+    elif isinstance(res, (str)):
+        print(res)
+    else:
         parser.print_help()
         sys.exit(0)

@@ -1,6 +1,5 @@
 Things not to forget:
 
-- Write tests
 - Provide binary and instructions about how to install
 - Create Telegram group/channel to be able to chat about the product
 - Write an article
