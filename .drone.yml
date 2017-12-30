@@ -28,6 +28,9 @@ pipeline:
 
   s3:
     image: plugins/s3
+    secrets:
+      - aws_access_key_id
+      - aws_secret_access_key
     bucket: vscalectl-public
     access_key: ${AWS_ACCESS_KEY_ID}
     secret_key: ${AWS_SECRET_ACCESS_KEY}
