@@ -19,8 +19,7 @@ pipeline:
       - apt-get install binutils jq curl tree -qqy
       - pip3 install -r requirements.txt
       - pip3 install pyinstaller
-      - bash util/build_name_generate.sh
-      - pyinstaller -n $${VSCALECTL_BUILD} --onefile vscalectl.py
+      - pyinstaller -n $(bash util/build_name_generate.sh) --onefile vscalectl.py
       - tree
     when:
       branch:
