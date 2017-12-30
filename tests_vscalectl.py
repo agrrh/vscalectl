@@ -21,10 +21,10 @@ if __name__ == '__main__':
     cli = Client(api, no_header=True)
 
     res = True
-    res = res & cli.do('images', None, None, {'image': None, 'plan': None, 'location': None})
-    res = res & cli.do('locations', None, None, {'image': None, 'plan': None, 'location': None})
-    res = res & cli.do('plans', None, None, {'image': None, 'plan': None, 'location': None})
-    res = res & cli.do('servers', None, None, {'image': None, 'plan': None, 'location': None})
+    res = res & bool(cli.do('images', None, None, {'image': None, 'plan': None, 'location': None}))
+    res = res & bool(cli.do('locations', None, None, {'image': None, 'plan': None, 'location': None}))
+    res = res & bool(cli.do('plans', None, None, {'image': None, 'plan': None, 'location': None}))
+    res = res & bool(cli.do('servers', None, None, {'image': None, 'plan': None, 'location': None}))
 
     if res:
         sys.exit(0)
