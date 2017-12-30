@@ -32,8 +32,8 @@ pipeline:
       - minio_access_key
       - minio_secret_key
     bucket: vscalectl-public
-    access_key: $${MINIO_ACCESS_KEY}
-    secret_key: $${MINIO_SECRET_KEY}
+    access_key: ${MINIO_ACCESS_KEY}
+    secret_key: ${MINIO_SECRET_KEY}
     source: dist
     target: /
     path_style: true
