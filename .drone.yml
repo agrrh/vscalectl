@@ -28,13 +28,17 @@ pipeline:
       build #{{build.number}}
       link: {{build.link}}
     when:
-      status: changed
+      status: failure
 
   telegram_distribute:
     image: appleboy/drone-telegram
     secrets:
       - telegram_token
       - telegram_to
+    message: >
+      build #{{build.number}}
+      link: {{build.link}}
     document: dist/vscalectl
     when:
       branch: master
+      status: success
