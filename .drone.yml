@@ -28,12 +28,9 @@ pipeline:
 
   s3:
     image: plugins/s3
-    secrets:
-      - minio_access_key
-      - minio_secret_key
     bucket: vscalectl-public
-    access_key: $${MINIO_ACCESS_KEY}
-    secret_key: $${MINIO_SECRET_KEY}
+    access_key: ${AWS_ACCESS_KEY_ID}
+    secret_key: ${AWS_SECRET_ACCESS_KEY}
     source: dist/*
     target: /
     strip_prefix: dist/
