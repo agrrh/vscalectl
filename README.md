@@ -8,6 +8,8 @@ Currently lacks some "complex" methods like upgrading, making backups and managi
 
 # Installation
 
+### Method 1: Python script
+
 ```
 # git clone ... && cd vscalectl
 
@@ -15,6 +17,16 @@ export VSCALE_API_TOKEN="my-secret-token"
 
 pip3 install -r requirements.txt
 ./vscalectl.py --help
+```
+
+### Method 2: Executable binary
+
+- Download latest release binary from [releases page](https://github.com/agrrh/vscalectl/releases)
+- Just copy it inside one of path directories
+
+```
+chmod +x vscalectl
+cp vscalectl /usr/local/bin/
 ```
 
 # Notes
