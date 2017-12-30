@@ -32,7 +32,7 @@ if __name__ == '__main__':
     print('Plans: {}'.format(res))
 
     servers = cli.do('servers', None, None, {'image': None, 'plan': None, 'location': None})
-    res = res & (True if servers is [] else bool(servers))
+    res = res & (True if servers == [] else bool(servers))
     print('Servers: {}'.format(res))
 
     if res:
