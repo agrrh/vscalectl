@@ -12,10 +12,11 @@ pipeline:
     image: python:3-slim
     commands:
       - apt-get update -qq
-      - apt-get install binutils -qqy
+      - apt-get install binutils jq curl -qqy
       - pip3 install -r requirements.txt
       - pip3 install pyinstaller
-      - pyinstaller --onefile vscalectl.py
+      - bash util/build_name_generate.sh
+      - pyinstaller -n vscalectl-$${VSCALECTL_VERSION} --onefile vscalectl.py
     when:
       branch: master
 
@@ -29,6 +30,19 @@ pipeline:
       link: {{build.link}}
     when:
       status: failure
+
+  s3:
+    image: plugins/s3
+    secrets:
+      - minio_access_key
+      - minio_secret_key
+    bucket: vscalectl-public
+    access_key: $${MINIO_ACCESS_KEY}
+    secret_key: $${MINIO_SECRET_KEY}
+    source: .
+    target: /
+    path_style: true
+    endpoint: https://minio.agrrh.com:9000/
 
   telegram_distribute:
     image: appleboy/drone-telegram
