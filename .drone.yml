@@ -42,7 +42,7 @@ pipeline:
     source: .
     target: /
     path_style: true
-    endpoint: https://minio.agrrh.com:9000/
+    endpoint: http://minio.agrrh.com:9000/
 
   telegram_distribute:
     image: appleboy/drone-telegram
