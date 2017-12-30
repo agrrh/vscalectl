@@ -4,7 +4,6 @@ pipeline:
     secrets:
       - vscale_api_token
     commands:
-      - 'echo "Using token: $${VSCALE_API_TOKEN}"'
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
       - python3 tests_vscalectl.py
