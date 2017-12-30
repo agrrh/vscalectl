@@ -31,8 +31,8 @@ if __name__ == '__main__':
     res = res & bool(cli.do('plans', None, None, {'image': None, 'plan': None, 'location': None}))
     print('Plans: {}'.format(res))
 
-    servers = True if servers is [] else bool(cli.do('servers', None, None, {'image': None, 'plan': None, 'location': None}))
-    res = res & servers
+    servers = cli.do('servers', None, None, {'image': None, 'plan': None, 'location': None})
+    res = res & (True if servers is [] else bool(servers))
     print('Servers: {}'.format(res))
 
     if res:
