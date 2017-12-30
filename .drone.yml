@@ -7,10 +7,10 @@ pipeline:
       - pip3 install -r requirements.txt
       - ./vscalectl.py --help
       - python3 tests_vscalectl.py
-  when:
-    branch:
-      exclude:
-        - dev
+    when:
+      branch:
+        exclude:
+          - dev
 
   build:
     image: python:3-slim
