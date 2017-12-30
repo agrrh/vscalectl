@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -x
+
 LATEST_TAG=$(curl -s https://api.github.com/repos/agrrh/vscalectl/tags | jq -r '.[0]["name"]')
 LATEST_SHA=$(curl -s https://api.github.com/repos/agrrh/vscalectl/commits | jq -r '.[0]["sha"]' | head -c 8)
 
@@ -12,4 +14,4 @@ NEW_MINOR=$[${VERSION_MINOR}+1]
 
 NEW_TAG="${VERSION_API}.${VERSION_MAJOR}.${NEW_MINOR}"
 
-export VSCALECTL_BUILD=${NEW_TAG}-pre-${LATEST_SHA}
+export VSCALECTL_BUILD="vscalectl-${NEW_TAG}-pre-${LATEST_SHA}"

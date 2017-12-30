@@ -20,7 +20,7 @@ pipeline:
       - pip3 install -r requirements.txt
       - pip3 install pyinstaller
       - bash util/build_name_generate.sh
-      - pyinstaller -n vscalectl-$${VSCALECTL_VERSION} --onefile vscalectl.py
+      - pyinstaller -n $${VSCALECTL_VERSION} --onefile vscalectl.py
       - tree
     when:
       branch:
@@ -35,7 +35,7 @@ pipeline:
     bucket: vscalectl-public
     access_key: $${MINIO_ACCESS_KEY}
     secret_key: $${MINIO_SECRET_KEY}
-    source: .
+    source: dist
     target: /
     path_style: true
     endpoint: http://minio.agrrh.com:9000/
