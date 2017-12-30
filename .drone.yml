@@ -34,8 +34,8 @@ pipeline:
     bucket: vscalectl-public
     access_key: ${MINIO_ACCESS_KEY}
     secret_key: ${MINIO_SECRET_KEY}
-    source: .
-    target: .
+    source: dist/*
+    target: /
     path_style: true
     endpoint: http://minio.agrrh.com:9000
     when:
