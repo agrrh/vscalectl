@@ -24,7 +24,7 @@ pipeline:
     secrets:
       - telegram_token
       - telegram_to
-    message: >
+    message: |
       build #{{build.number}}
       link: {{build.link}}
     when:
@@ -35,7 +35,7 @@ pipeline:
     secrets:
       - telegram_token
       - telegram_to
-    message: >
+    message: |
       build #{{build.number}}
       link: {{build.link}}
     document: dist/vscalectl
