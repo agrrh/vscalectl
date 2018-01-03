@@ -1,5 +1,6 @@
 Things not to forget:
 
+- Be able to call servers by names
 - Create Telegram group/channel to be able to chat about the product (gitter?)
 - Prepare image for build
 - Write an article
