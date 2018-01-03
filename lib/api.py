@@ -113,17 +113,3 @@ class API(object):
 
     def servers_one(self, ctid):
         return self.call('scalets/' + str(ctid))
-
-    servers_one_get = servers_one
-
-    def servers_one_create(self, name, image=None, plan=None, location=None, keys=None):
-        data = {
-            'make_from': self.image_default if image is None else image,
-            'rplan': self.plan_default if plan is None else plan,
-            'do_start': True,
-            'name': name,
-            'hostname': name,
-            'keys': self.keys_default if keys is None else keys,
-            'location': self.location_default if location is None else location
-        }
-        return self.call('scalets/', method='POST', data=data)
