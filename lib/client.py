@@ -37,7 +37,8 @@ class Client(object):
                     'do_start': True,
                     'name': identifier,
                     'hostname': identifier,
-                    'location': params['location'] if params['location'] is not None else self.api.cache.location
+                    'location': params['location'] if params['location'] is not None else self.api.cache.location,
+                    'keys': self.api.cache.keys
                 })
             elif action == 'stop':
                 data = self.api.call('scalets/{}/stop'.format(identifier), method='PATCH')
