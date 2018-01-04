@@ -29,16 +29,19 @@ class API(object):
         headers = {'X-Token': self.token}
 
         try:
-            res = methods_map[method](self.addr + path, headers=headers, json=data).json()
+            response = methods_map[method](self.addr + path, headers=headers, json=data)
+            result = response.json()
         except:
             print("Error occured: {}".format(sys.exc_info()[0]))
-            res = False
+            result = False
 
-        if res is False:
+        if result is False:
             print('Could not call API or parse output, exiting.')
+            print(data)
+            print(response)
             sys.exit(1)
 
-        return res
+        return result
 
     def _best_image(self):
         images_all = self.call('images')
@@ -60,7 +63,9 @@ class API(object):
         images_select = [i['id'] for i in images_select]
         images_select.sort(reverse=True)
 
-        return images_select[0]
+        if len(images_select) > 0:
+            return images_select[0]
+        return None
 
     def _closest_location(self):
         """Try to get user's geolocation and calculate closest which of data-centers is closest. Fallback to msk0 when errors occur."""
