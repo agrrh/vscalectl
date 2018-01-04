@@ -85,17 +85,15 @@ class Client(object):
                     image='Image',
                     plan='Plan',
                     location='Loc',
-                    locked='',
                     address='Address'
                 ))
             for server in data:
                 res.append(self.templates.SERVERS_ROW.format(
                     ctid=server['ctid'],
                     name=server['name'] if len(server['name']) < 24 else server['name'][:22] + "…",
-                    status=server['status'],
+                    status=('L ' if server['locked'] else '') + server['status'],
                     image=server['made_from'],
                     plan=server['rplan'],
-                    locked='L ' if server['locked'] else '',
                     location=server['location'],
                     address=server['public_address']['address']
                 ))
