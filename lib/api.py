@@ -8,12 +8,10 @@ class API(object):
         self.token = token
         self.cache = cache
 
-        self.cache.location = self._closest_location() or self.cache.location
+        self.cache.location = self._closest_location() or self.cache.location or 'spb0'
         self.cache.plan = self.cache.plan or 'small'
-        self.cache.image = self.cache.image or self._best_image()
-        self.cache.keys = self.cache.keys or [
-            k['id'] for k in self.call('sshkeys')
-        ]
+        self.cache.image = self.cache.image or self._best_image() or 'ubuntu_16.04_64_001_master'
+        self.cache.keys = self.cache.keys or [k['id'] for k in self.call('sshkeys')]
 
         self.cache.save()
 
@@ -47,25 +45,34 @@ class API(object):
         images_all = self.call('images')
 
         # Narrow by location, plan, purpose and then os type and version
-        images_select = [i for i in images_all if self.cache.location in i['locations']]
-        images_select = [i for i in images_select if i['active']]
-        images_select = [i for i in images_select if self.cache.plan in i['rplans']]
-        images_select = [i for i in images_select if 'master' in i['id']]
-        images_select = [i for i in images_select if 'ubuntu' in i['id']]
+        images_select = list(filter(lambda i: i['active'], images_all))
+        images_select = list(filter(lambda i: 'ubuntu' in i['id'], images_select))
+        images_select = list(filter(lambda i: 'master' in i['id'], images_select))
 
-        # Trying to find latest LTS version
+        images_select = list(filter(lambda i: self.cache.location in i['locations'], images_select))
+        images_select = list(filter(lambda i: self.cache.plan in i['rplans'], images_select))
+
+        # Trying to find latest LTS version by seeking for xx.04 where xx is even number
         try:
-            images_select = [i for i in images_select if '.04' in i['id'] and int(i['id'][7:9]) % 2 == 0]
+            images_select = list(filter(
+                lambda i: '.04' in i['id'] and int(i['id'][7:9]) % 2 == 0,
+                images_select
+            ))
         except:
-            images_select = [i for i in images_select if '.04' in i['id']]
+            images_select = list(filter(
+                lambda i: '.04' in i['id'],
+                images_select
+            ))
 
         # Make list of IDs
         images_select = [i['id'] for i in images_select]
-        images_select.sort(reverse=True)
 
-        if len(images_select) > 0:
-            return images_select[0]
-        return None
+        try:
+            res = images_select[-1]
+        except IndexError:
+            res = None
+
+        return res
 
     def _closest_location(self):
         """Try to get user's geolocation and calculate closest which of data-centers is closest. Fallback to msk0 when errors occur."""
