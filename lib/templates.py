@@ -23,7 +23,7 @@ class Templates(object):
         "Locked:\t\t{locked}"
     )
 
-    SERVERS_ROW = "{ctid:<10}{locked}{status:<12}{name:<24}{address:<16}{plan:<8}{location:<8}{image:<24}"
+    SERVERS_ROW = "{ctid:<10}{status:<12}{name:<24}{address:<16}{plan:<8}{location:<8}{image:<24}"
 
     IMAGES_ROW = "{id:<32}{plans:<36}{locations:<24}"
 
