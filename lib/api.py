@@ -34,7 +34,7 @@ class API(object):
             result = False
 
         if result is False:
-            print('Could not call API or parse output, exiting.')
+            print('Could not call API or parse output, exiting. Response:')
             print(data)
             print(response)
             sys.exit(1)
