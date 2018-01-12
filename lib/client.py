@@ -28,6 +28,15 @@ class Client(object):
 
     def servers(self, identifier, action, params):
         if identifier:
+            if not identifier.isdigit():
+                try:
+                    identifier = [
+                        server['ctid'] for server in self.api.call('scalets')
+                        if server['name'] == identifier
+                    ][0]
+                except IndexError:
+                    res = ["Could not find server by name, try using CTID instead."]
+
             if action == 'get':
                 data = self.api.call('scalets/{}'.format(identifier))
             elif action == 'create':
